@@ -1,0 +1,13 @@
+{
+  "env": "dev",
+  "server": {
+    "ports": 8080
+  },
+  "mongoDB": {
+    "url": "no link"
+  },
+  "error": {
+    "IS_SHOW_ERROR_MESSAGE": true,
+    "DEFAULT_ERROR_MESSAGE": "There was an error processing this message"
+  }
+}
