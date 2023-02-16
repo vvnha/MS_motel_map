@@ -1,0 +1,49 @@
+services:
+  motel-app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 3001:3001
+    working_dir: /app/motels
+    volumes:
+      - ./:/app/motels
+      - ../constants:/app/constants
+    environment:
+      MESSAGE_BROKER_URL: 'amqp://master-rabbitmq:5672'
+    networks:
+      - motel-network
+
+  master-rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=cluster_cookie
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    volumes:
+      - ./storage/master-rabbitmq:/var/lib/rabbitmq
+    ports:
+      - '4369:4369'
+      - '5671:5671'
+      - '5672:5672'
+      - '15671:15671'
+      - '15672:15672'
+      - '25672:25672'
+    networks:
+      - motel-network
+
+#   mysql:
+#     image: mysql:8.0
+#     volumes:
+#       - todo-mysql-data:/var/lib/mysql
+#     environment:
+#       MYSQL_ROOT_PASSWORD: secret
+#       MYSQL_DATABASE: todos
+#     networks:
+#       - newtapp-network
+
+# volumes:
+#   todo-mysql-data:
+
+networks:
+  motel-network:
+    driver: bridge
